@@ -1,49 +1,34 @@
 import numpy as np
 import time
-import matplotlib.pyplot as plt
 
-# Function to compute Discrete Fourier Transform (DFT)
-def DFT(f):
-    n = len(f)
-    dft = np.zeros(n, dtype=np.complex128)
+def dft(x):
+    N = len(x)
+    dft_result = np.zeros(N, dtype=np.complex128)
+    for k in range(N):
+        for n in range(N):
+            dft_result[k] += x[n] * np.exp(-2j * np.pi * k * n / N) / (np.sqrt(N))
+    return dft_result
 
-    # Iterate over all frequencies q
-    for q in range(n):
-        # Iterate over all time points p
-        for p in range(n):
-            # Compute the DFT using the formula
-            dft[q] += (f[p] * np.exp(-2j * np.pi * p * q / n)) / (np.sqrt(n))
+# Number of elements in the sequence
+n = 1000
 
-    return dft
+# Generating a sample sequence
+sequence = np.random.rand(n)
 
-# Define a range of n values for testing
-n_values = range(4, 101)
-direct_times = []  # List to store execution times for direct computation
-fft_times = []     # List to store execution times for numpy.fft.fft
+# Computing DFT using direct computation
+start_time = time.time()
+dft_result_direct = dft(sequence)
+end_time = time.time()
+direct_time = end_time - start_time
 
-# Loop through different n values
-for n in n_values:
-    x = np.random.random(n)  # Generate a random signal of length n
+# Computing DFT using numpy.fft.fft
+start_time = time.time()
+dft_result_fft = np.fft.fft(sequence)
+end_time = time.time()
+fft_time = end_time - start_time
 
-    # Measure execution time for direct computation
-    start_time = time.time()
-    _ = DFT(x)
-    end_time = time.time()
-    direct_times.append(end_time - start_time)
-
-    # Measure execution time for numpy.fft.fft
-    start_time = time.time()
-    _ = np.fft.fft(x)
-    end_time = time.time()
-    fft_times.append(end_time - start_time)
-
-# Plotting
-plt.figure(figsize=(10, 6))
-plt.plot(n_values, direct_times, label='Direct Computation')
-plt.plot(n_values, fft_times, label='numpy.fft.fft')
-plt.legend()
-plt.xlabel('n')
-plt.ylabel('Time (seconds)')
-plt.title('Time taken by DFT methods as a function of n')
-plt.grid(True)
-plt.show()
+# Printing results and time taken
+print("DFT using direct computation:", dft_result_direct)
+print("DFT using numpy.fft.fft:", dft_result_fft)
+print("Time taken by direct computation method:", direct_time, "seconds")
+print("Time taken by numpy.fft.fft method:", fft_time, "seconds")
