@@ -1,0 +1,30 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def box_function(x):
+    return np.where(np.logical_and(x > -1, x < 1), 1, 0)
+
+def convolution(f, g, dx):
+    result = np.convolve(f, g, mode='same') * dx
+    return result
+
+# Define the range and step size for x
+x = np.linspace(-3, 3, 1000)
+dx = x[1] - x[0]
+
+# Compute the box function
+box = box_function(x)
+
+# Compute the convolution of the box function with itself
+convolution_result = convolution(box, box, dx)
+
+# Plot the box function and the convolution result
+plt.figure(figsize=(10, 6))
+plt.plot(x, box, label='Box Function')
+plt.plot(x, convolution_result, label='Convolution')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.title('Convolution of Box Function with Itself')
+plt.legend()
+plt.grid(True)
+plt.show()
