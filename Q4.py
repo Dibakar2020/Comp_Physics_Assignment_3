@@ -8,7 +8,6 @@ k_value = data_analytic[:,0]
 Analytic_fourier_transform = data_analytic[:,1]
 Numerical_fourier_transform = data_numerical[:,1]
 
-
 # Plotting the results
 plt.figure(figsize=(10, 5))
 plt.plot(k_value, Numerical_fourier_transform,  label = "Numerical fourier transform")
